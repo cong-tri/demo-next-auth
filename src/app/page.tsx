@@ -1,4 +1,4 @@
-import { authOptions } from './api/auth/[...nextauth]/route'
+import { authOptions } from './api/auth/[...nextauth]/page'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import Title from 'antd/es/typography/Title'
