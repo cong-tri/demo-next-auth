@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import { signIn } from 'next-auth/react';
-import { Button, Form, Input } from 'antd';
 import { useRouter } from 'next/navigation';
+// import { signIn } from 'next-auth/react';
+import { Button, Form, Input } from 'antd';
 
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -18,15 +18,31 @@ const SignInForm: React.FC = () => {
     const router = useRouter();
     const onFinish = async (values: any) => {
         console.log('Success:', values);
-        signIn("credentials", {
-            ...values,
-            redirect: false
-        });
-        setTimeout(() => {
-            router.push("/");
-        }, 1000);
+        // signIn("credentials", {
+        //     ...values,
+        //     redirect: false
+        // });
+        try {
+            const res = await fetch('/api/login',
+                {
+                    method: "POST",
+                    body: JSON.stringify(values),
+                }
+            );
+            const data = await res.json();
+            if (res.status === 200) {
+                console.log(data.message);
+                setTimeout(() => {
+                    router.push(data.httpPath);
+                }, 1000);
+            } else {
+                console.error(data.message);
+                return;
+            }
+        } catch (error) {
+            console.error('Login failed');
+        }
     };
-
     return (
         <Form
             name="basic"
