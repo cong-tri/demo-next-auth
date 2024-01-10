@@ -1,9 +1,8 @@
 import { setCookie, setToken } from "@/app/services";
-import { ListUser, MY_SECRET_TOKEN, MY_SESSION_TOKEN_KEY } from "@/constant";
+import { ListUser } from "@/constant";
 
 export async function POST(request: Request) {
-  const { username, password } = await request.json(); 
-  
+  const { username, password } = await request.json();
   if (!username || !password) {
     return Response.json({
       message: "Missing Credentials",
@@ -17,10 +16,9 @@ export async function POST(request: Request) {
   );
 
   if (user) {
-    const clientID = Math.floor((Math.random() * 100) + 1);
-    console.log(clientID);
-    const tokenUser = setToken(user, clientID, MY_SECRET_TOKEN);
-    setCookie(MY_SESSION_TOKEN_KEY, tokenUser, '/');
+    const clientID = Math.floor(Math.random() * 100 + 1);
+    const tokenUser = setToken(user, clientID);
+    setCookie(tokenUser);
     return Response.json({
       status: 200,
       data: user,
@@ -28,8 +26,7 @@ export async function POST(request: Request) {
       httpPath: "/",
       statusLogin: true,
     });
-  }
-  else {
+  } else {
     return Response.json({
       status: 400,
       data: null,

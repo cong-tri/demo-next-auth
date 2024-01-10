@@ -1,26 +1,36 @@
-import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
+import { MY_SECRET_TOKEN, MY_SESSION_TOKEN_KEY } from "@/constant";
 // get cookie
-export const getCookie = (cname: string) => { 
-    return cookies().get(cname)?.value as string; 
-}
+export const getCookie = (): string => {
+  return cookies().get(MY_SESSION_TOKEN_KEY)?.value as string;
+};
 // set cookie
-export const setCookie = (cname: string, token: string, pathUrl: string) => { 
-    return cookies().set({
-      name: cname,
-      value: token,
-      httpOnly: true,
-      path: pathUrl,
-    }); 
+export const setCookie = (token: string): any | undefined => {
+  return cookies().set(MY_SESSION_TOKEN_KEY, token);
+};
+//
+export function getSessionIdAndCreateIfMissing() {
+  const sessionId = getCookie();
+  if (!sessionId) {
+    const newSessionId = crypto.randomUUID();
+    setCookie(newSessionId);
+    return newSessionId;
+  }
+  return sessionId;
 }
+//
 // set token
-export const setToken = (userInfo:any, userID: number, cname: string) => { 
-  return jwt.sign({ userInfo, userID }, cname, {
-      algorithm: "HS256",
-      expiresIn: "5y",
-    });
-}
+export const setToken = (
+  userInfo: any,
+  userID: number,
+): any | undefined => {
+  return jwt.sign({ userInfo, userID }, MY_SECRET_TOKEN, {
+    algorithm: "HS256",
+    expiresIn: "5d",
+  });
+};
 // decode token
-export const decodeToken = (token: string) => { 
-  return jwt.decode(token) as jwt.JwtPayload; 
-}
+export const decodeToken = (token: string): any | undefined => {
+  return jwt.decode(token) as jwt.JwtPayload;
+};

@@ -17,7 +17,6 @@ type FieldType = {
 const SignInForm: React.FC = () => {
     const router = useRouter();
     const onFinish = async (values: any) => {
-        console.log('Success:', values);
         // signIn("credentials", {
         //     ...values,
         //     redirect: false

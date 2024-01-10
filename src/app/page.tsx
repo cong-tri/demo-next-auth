@@ -4,14 +4,13 @@ import { redirect } from "next/navigation";
 import jwt from "jsonwebtoken";
 import { decodeToken, getCookie } from "./services";
 import Title from "antd/es/typography/Title";
-import { MY_SESSION_TOKEN_KEY } from "@/constant";
 export default async function Home() {
   // const session = await getServerSession(authOptions);
   // if (!session) {
   //   console.log("Please Sign In before Entered The Home Page");
   //   redirect('/signin');
   // };
-  const session: string = getCookie(MY_SESSION_TOKEN_KEY);
+  const session: string = getCookie();
   if (!session) {
     console.error("Please Sign In before Entered The Home Page");
     redirect("/signin");
