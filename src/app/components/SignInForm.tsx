@@ -2,7 +2,8 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 // import { signIn } from 'next-auth/react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
+import { MY_SESSION_TOKEN_KEY } from '@/constant';
 
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -22,26 +23,27 @@ const SignInForm: React.FC = () => {
         //     redirect: false
         // });
         try {
-            const res = await fetch('/api/login',
+            const responseSession = await fetch('/api/login',
                 {
                     method: "POST",
                     body: JSON.stringify(values),
                 }
             );
-            const data = await res.json();
-            console.log(data);
-
-            if (res.status === 200) {
-                console.log(data.message);
+            const response = await responseSession.json();
+            if (responseSession.ok && responseSession.status === 200) {
+                message.success(response.message);
+                if (typeof (Storage) !== 'undefined') {
+                    sessionStorage.setItem(MY_SESSION_TOKEN_KEY, response.data.tokenUser)
+                }
                 setTimeout(() => {
-                    router.push(data.httpPath);
+                    router.push(response.httpPath);
                 }, 1000);
             } else {
-                console.error(data.message);
+                console.error(response.message);
                 return;
             }
         } catch (error) {
-            console.error('Login failed');
+            message.error('Login failed');
         }
     };
     return (

@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     setCookie(tokenUser);
     return Response.json({
       name: "Session Response",
-      status: 200,
+      // status: 200,
       data: {sessionID ,user, tokenUser},
       message: "Login Successfully",
       httpPath: "/",

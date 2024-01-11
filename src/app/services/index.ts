@@ -22,10 +22,10 @@ export function getSessionIdAndCreateIfMissing() {
 //
 // set token
 export const setToken = (
-  dataToken: any,
+  sessionData: any,
   sessionID: number,
 ): any | undefined => {
-  return jwt.sign({ dataToken, sessionID }, MY_SECRET_TOKEN, {
+  return jwt.sign({ sessionData, sessionID }, MY_SECRET_TOKEN, {
     algorithm: "HS256",
     expiresIn: "5d",
   });
@@ -34,3 +34,14 @@ export const setToken = (
 export const decodeToken = (token: string): any | undefined => {
   return jwt.decode(token) as jwt.JwtPayload;
 };
+
+
+// getServerSideProps
+export async function get_Server_Side_Props() {
+  const session: string = await getCookie();
+  const infoUser: jwt.JwtPayload = await decodeToken(session);
+  return {
+    session,
+    infoUser,
+  };
+}
