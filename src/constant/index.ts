@@ -14,7 +14,7 @@ export const ListUser = [
     },
     {
         id: 3,
-        name: "daocongtri",
+        name: "congtri",
         password: "12345",
         email: "abc1@gmail.com",
     },

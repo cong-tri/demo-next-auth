@@ -29,10 +29,7 @@ export default async function Server() {
             {web ? <Title level={2}>Browers(Chrome or Edge): {web}</Title> : ""}
             {mozilla != null ? (
                 <Title level={2}>Browers Mozilla: {mozilla}</Title>
-            ) : (
-                ""
-            )}
+            ) : ""}
         </>
     );
 }
-

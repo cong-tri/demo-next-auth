@@ -17,6 +17,10 @@ const items: MenuProps['items'] = [
         label: <Link href={"/server"}>Server Page</Link>,
         key: 'server',
     },
+    {
+        label: <Link href={"/test"}>Test Page</Link>,
+        key: 'test',
+    },
 ];
 
 const Header: React.FC = () => {

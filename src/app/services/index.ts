@@ -22,10 +22,10 @@ export function getSessionIdAndCreateIfMissing() {
 //
 // set token
 export const setToken = (
-  userInfo: any,
-  userID: number,
+  dataToken: any,
+  sessionID: number,
 ): any | undefined => {
-  return jwt.sign({ userInfo, userID }, MY_SECRET_TOKEN, {
+  return jwt.sign({ dataToken, sessionID }, MY_SECRET_TOKEN, {
     algorithm: "HS256",
     expiresIn: "5d",
   });

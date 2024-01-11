@@ -16,7 +16,9 @@ export default async function Home() {
     redirect("/signin");
   }
   const infoUser: jwt.JwtPayload = decodeToken(session);
-  const { userInfo, userID } = infoUser;
+  const { dataToken, sessionID } = infoUser;
+  const dataResponse = await GET();
+  const dataTest = await dataResponse.json();
 
   return (
     <>
@@ -25,11 +27,24 @@ export default async function Home() {
       {infoUser ? (
         <>
           <Title level={3}>
-            Thông Tin User: {userInfo?.name} - {userInfo?.email}
+            Thông Tin User: {dataToken?.name} - {dataToken?.email}
           </Title>
-          <Title level={3}>ClientID: {userID}</Title>
+          <Title level={3}>ClientID: {sessionID}</Title>
         </>
       ) : null}
+      <Title>
+        {dataTest.data.full_name}
+      </Title>
     </>
   );
+}
+
+
+async function GET() {
+  const res = await fetch('https://api.github.com/repos/vercel/next.js');
+  const data = await res.json();
+  return Response.json({
+    name: "Data Response",
+    data
+  })
 }

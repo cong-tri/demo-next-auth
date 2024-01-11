@@ -29,6 +29,8 @@ const SignInForm: React.FC = () => {
                 }
             );
             const data = await res.json();
+            console.log(data);
+
             if (res.status === 200) {
                 console.log(data.message);
                 setTimeout(() => {
