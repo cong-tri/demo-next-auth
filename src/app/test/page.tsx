@@ -13,7 +13,7 @@ export default async function TestPage() {
         console.error("Please Sign In before Entered The Home Page");
         redirect("/signin");
     }
-    // const res = fetch('http://localhost:3000/api/login');
+    // const res = fetch('http://localhost:3000/api');
     // console.log((await res).bodyUsed);
 
     // const data = await res.json();

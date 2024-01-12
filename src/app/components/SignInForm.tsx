@@ -19,7 +19,7 @@ const SignInForm: React.FC = () => {
     const router = useRouter();
     const onFinish = async (values: any) => {
         try {
-            const responseSession = await fetch('/api/login',
+            const responseSession = await fetch('/api',
                 {
                     method: "POST",
                     body: JSON.stringify(values),
