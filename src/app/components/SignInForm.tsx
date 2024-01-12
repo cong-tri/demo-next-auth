@@ -1,9 +1,8 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-// import { signIn } from 'next-auth/react';
 import { Button, Form, Input, message } from 'antd';
-import { MY_SESSION_TOKEN_KEY } from '@/constant';
+// import { MY_SESSION_TOKEN_KEY } from '@/constant';
 import { setCookie } from 'typescript-cookie';
 
 const onFinishFailed = (errorInfo: any) => {
@@ -19,10 +18,6 @@ type FieldType = {
 const SignInForm: React.FC = () => {
     const router = useRouter();
     const onFinish = async (values: any) => {
-        // signIn("credentials", {
-        //     ...values,
-        //     redirect: false
-        // });
         try {
             const responseSession = await fetch('/api/login',
                 {

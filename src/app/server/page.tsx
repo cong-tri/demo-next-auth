@@ -1,15 +1,8 @@
-// import { getServerSession } from "next-auth";
-// import { authOptions } from "../api/auth/[...nextauth]/route";
 import { headers } from "next/headers";
 import { getCookie } from "../services";
 import { redirect } from "next/navigation";
 import Title from "antd/es/typography/Title"
 export default async function Server() {
-    // const session = await getServerSession(authOptions);
-    // if (!session) {
-    //     console.log("Please Sign In before Entered The Server Page");
-    //     redirect("/signin");
-    // }
     const web = headers().get("sec-ch-ua");
     const mozilla =
         headers().get("user-agent") ==

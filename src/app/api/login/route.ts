@@ -1,5 +1,3 @@
-// import cookie from 'cookie'
-// import { IncomingMessage, ServerResponse } from 'http'
 import { setCookie, setToken } from "@/app/services";
 import { ListUser } from "@/constant";
 // method POST
@@ -39,7 +37,7 @@ export async function POST(request: Request) {
   }
 }
 
-export async function authenticateUser(username: string, password: string) {
+async function authenticateUser(username: string, password: string) {
   if (!username || !password) {
     return;
   }

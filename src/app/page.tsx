@@ -1,17 +1,9 @@
-// import { authOptions } from './api/auth/[...nextauth]/route'
-// import { getServerSession } from 'next-auth'
 import { redirect } from "next/navigation";
-// import jwt from "jsonwebtoken";
 import { get_Server_Side_Props } from "./services";
 import Title from "antd/es/typography/Title";
 import { cookies } from "next/headers";
 export default async function Home(
 ) {
-  // const session = await getServerSession(authOptions);
-  // if (!session) {
-  //   console.log("Please Sign In before Entered The Home Page");
-  //   redirect('/signin');
-  // };
   // const session: string = getCookie();
   // const props = await get_Server_Side_Props();
   // const session: string = props?.session;
