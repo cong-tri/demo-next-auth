@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 // import { signIn } from 'next-auth/react';
 import { Button, Form, Input, message } from 'antd';
 import { MY_SESSION_TOKEN_KEY } from '@/constant';
+import { setCookie } from 'typescript-cookie';
 
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -30,10 +31,14 @@ const SignInForm: React.FC = () => {
                 }
             );
             const response = await responseSession.json();
+            console.log(response);
+
             if (responseSession.ok && responseSession.status === 200) {
                 message.success(response.message);
                 if (typeof (Storage) !== 'undefined') {
-                    sessionStorage.setItem(MY_SESSION_TOKEN_KEY, response.data.tokenUser)
+                    // sessionStorage.setItem(MY_SESSION_TOKEN_KEY, response.data.tokenUser)
+                    setCookie('SessionID', response.data.sessionID, { expires: 1 });
+                    // sessionStorage.setItem("SessionID", response.data.sessionID)
                 }
                 setTimeout(() => {
                     router.push(response.httpPath);

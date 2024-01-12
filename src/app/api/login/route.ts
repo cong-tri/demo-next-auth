@@ -11,22 +11,18 @@ export async function POST(request: Request) {
       status: 400,
     });
   }
-  // create random sessionID when client send request to server
-  // server session id
-  const sessionID = Math.floor(Math.random() * 100 + 1);
-
-  const user = ListUser.find(
-    ({ name, password }: { name: string; password: string }) =>
-      name === username && password === password
-  );
-
-  if (user) {
-    const tokenUser = setToken(user, sessionID);
-    setCookie(tokenUser);
+  // // create random sessionID when client send request to server
+  // // server session id
+  const session = await authenticateUser(username, password);
+  console.log(session);
+  // const { user, sessionID } = session;
+  if (session) {
+    const tokenUser = setToken(session?.user, session?.sessionID);
+    // setCookie(tokenUser);
     return Response.json({
       name: "Session Response",
-      // status: 200,
-      data: {sessionID ,user, tokenUser},
+      status: 200,
+      data: {sessionID: session?.sessionID},
       message: "Login Successfully",
       httpPath: "/",
       statusLogin: true,
@@ -35,7 +31,7 @@ export async function POST(request: Request) {
     return Response.json({
       name: "Session Response",
       status: 400,
-      data: {sessionID},
+      data: null,
       message: "Login Failed",
       httpPath: "/login",
       statusLogin: false,
@@ -43,9 +39,23 @@ export async function POST(request: Request) {
   }
 }
 
+export async function authenticateUser(username: string, password: string) {
+  if (!username || !password) {
+    return;
+  }
+  const user: any | undefined = ListUser.find(
+    ({ name, password }: { name: string; password: string }) =>
+      name === username && password === password
+  );
+  // check authorize user if successfully create an sessionID for server in order to send session to client
+  const sessionID: number = Math.floor(Math.random() * 100 + 1);
+  return {
+    user,
+    sessionID,
+  };
+}
 
 // method GET
-
 // export async function GET(req: Request) {
 //   // const res = await
 //   // console.log(req.headers);

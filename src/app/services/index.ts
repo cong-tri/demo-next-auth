@@ -39,9 +39,9 @@ export const decodeToken = (token: string): any | undefined => {
 // getServerSideProps
 export async function get_Server_Side_Props() {
   const session: string = await getCookie();
-  const infoUser: jwt.JwtPayload = await decodeToken(session);
+  // const infoUser: jwt.JwtPayload = await decodeToken(session);
   return {
     session,
-    infoUser,
+    // infoUser,
   };
 }

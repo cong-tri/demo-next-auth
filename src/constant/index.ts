@@ -1,5 +1,6 @@
-export const api_url: string = "http://localhost:8000/users"
-export const ListUser = [
+// export const api_url: string = "http://localhost:8000/users"
+type User = { id: number, name: string, password: string, email: string };
+export const ListUser:User[] = [
     {
         id: 1,
         name: "Eric",
