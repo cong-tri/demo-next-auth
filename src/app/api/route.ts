@@ -11,9 +11,9 @@ export async function POST(request: Request): Promise<any | undefined> {
   }
   // create random sessionID when client send request to server
   // server session id
-  const session = await authenticateUser(username, password);
-  const { user, sessionID } = session;
-  if (session) {
+  const authenUser = await authenticateUser(username, password);
+  const { user, sessionID } = authenUser;
+  if (authenUser) {
     const tokenUser = createToken(user, sessionID);
     setCookie(tokenUser);
     return Response.json({
@@ -54,4 +54,3 @@ async function authenticateUser(
     sessionID,
   };
 }
-

@@ -2,6 +2,7 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { MY_SECRET_TOKEN, MY_SESSION_TOKEN_KEY } from "@/constant";
+import { getSession } from "../lib/session";
 // get cookies
 export const getCookie = (): string => {
   return cookies().get(MY_SESSION_TOKEN_KEY)?.value as string;
@@ -10,7 +11,7 @@ export const getCookie = (): string => {
 export const setCookie = (token: string): any | undefined => {
   return cookies().set(MY_SESSION_TOKEN_KEY, token, {
     expires: 5,
-    path: '/',
+    path: "/",
     maxAge: 60 * 10,
     httpOnly: true,
     sameSite: "strict",
@@ -46,5 +47,34 @@ export async function get_Server_Side_Props() {
   return {
     session,
     infoUser,
+  };
+}
+
+export default async function handler(req: any, res: any): Promise<any>{
+  const session = await getSession(req, res);
+  const data = { hello: "hello im a data in session" };
+  session.myData = data;
+  // return Response.json({
+  //   status: 200,
+  //   res: session.myData
+  // })
+}
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+};
+
+export async function getServerSide(): Promise<any>{
+  // const session = await getSession(req, res);
+  const request: any = Request;
+  const response: any = Response;
+  const session = await getSession(request, response);
+  console.log(session);
+  
+  return {
+    props: {
+      dataInSession: session.myData,
+    },
   };
 }
