@@ -2,19 +2,14 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, Form, Input, message } from 'antd';
-// import { MY_SESSION_TOKEN_KEY } from '@/constant';
-import { setCookie } from 'typescript-cookie';
-
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
 };
-
 type FieldType = {
     username?: string;
     password?: string;
     remember?: string;
 };
-
 const SignInForm: React.FC = () => {
     const router = useRouter();
     const onFinish = async (values: any) => {
@@ -26,15 +21,8 @@ const SignInForm: React.FC = () => {
                 }
             );
             const response = await responseSession.json();
-            console.log(response);
-
             if (responseSession.ok && responseSession.status === 200) {
                 message.success(response.message);
-                if (typeof (Storage) !== 'undefined') {
-                    // sessionStorage.setItem(MY_SESSION_TOKEN_KEY, response.data.tokenUser)
-                    setCookie('SessionID', response.data.sessionID, { expires: 1 });
-                    // sessionStorage.setItem("SessionID", response.data.sessionID)
-                }
                 setTimeout(() => {
                     router.push(response.httpPath);
                 }, 1000);
@@ -82,5 +70,4 @@ const SignInForm: React.FC = () => {
         </Form>
     )
 }
-
 export default SignInForm;

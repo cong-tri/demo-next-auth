@@ -1,31 +1,27 @@
 import { redirect } from "next/navigation";
 import { get_Server_Side_Props } from "./services";
 import Title from "antd/es/typography/Title";
-import { cookies } from "next/headers";
 export default async function Home(
 ) {
-  // const session: string = getCookie();
-  // const props = await get_Server_Side_Props();
-  // const session: string = props?.session;
-  const session = cookies().get('SessionID');
+  const props = await get_Server_Side_Props();
+  const session: string = props?.session;
   if (!session) {
     console.error("Please Sign In before Entered The Home Page");
     redirect("/signin");
   }
-  // const dataUser: jwt.JwtPayload = props.infoUser;
-  // const { sessionData, sessionID } = dataUser;
+  const dataUser: any = props.infoUser;
+  const { sessionData, sessionID } = dataUser;
   return (
     <>
       <Title level={2}>Next Js Authentication</Title>
-      {/* {session ? <Title>{session.user?.name} - {session.user?.email} </Title> : null} */}
-      {/* {dataUser ? (
+      {dataUser ? (
         <>
           <Title level={3}>
             Thông Tin User: {sessionData?.name} - {sessionData?.email}
           </Title>
           <Title level={3}>ClientID: {sessionID}</Title>
         </>
-      ) : null} */}
+      ) : null}
     </>
   );
 }

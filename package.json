@@ -15,8 +15,7 @@
     "jsonwebtoken": "^9.0.2",
     "next": "14.0.4",
     "react": "^18",
-    "react-dom": "^18",
-    "typescript-cookie": "^1.0.6"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@types/cookie": "^0.6.0",

@@ -1,7 +1,7 @@
-import { setCookie, setToken } from "@/app/services";
+import { setCookie, createToken } from "@/app/services";
 import { ListUser } from "@/constant";
 // method POST
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<any | undefined> {
   const { username, password } = await request.json();
   if (!username || !password) {
     return Response.json({
@@ -9,18 +9,17 @@ export async function POST(request: Request) {
       status: 400,
     });
   }
-  // // create random sessionID when client send request to server
-  // // server session id
+  // create random sessionID when client send request to server
+  // server session id
   const session = await authenticateUser(username, password);
-  console.log(session);
-  // const { user, sessionID } = session;
+  const { user, sessionID } = session;
   if (session) {
-    const tokenUser = setToken(session?.user, session?.sessionID);
-    // setCookie(tokenUser);
+    const tokenUser = createToken(user, sessionID);
+    setCookie(tokenUser);
     return Response.json({
       name: "Session Response",
       status: 200,
-      data: {sessionID: session?.sessionID},
+      data: { sessionID, user, tokenUser },
       message: "Login Successfully",
       httpPath: "/",
       statusLogin: true,
@@ -37,7 +36,10 @@ export async function POST(request: Request) {
   }
 }
 
-async function authenticateUser(username: string, password: string) {
+async function authenticateUser(
+  username: string,
+  password: string
+): Promise<any | undefined> {
   if (!username || !password) {
     return;
   }
@@ -53,23 +55,3 @@ async function authenticateUser(username: string, password: string) {
   };
 }
 
-// method GET
-// export async function GET(req: Request) {
-//   // const res = await
-//   // console.log(req.headers);
-//   // const cookies = cookie.parse(req.headers.cookie || '')
-//   // const sessionID = cookies.sessionID
-
-//   // if (sessionID) {
-//   //   // Gửi yêu cầu đến server để lấy dữ liệu tạm thời được lưu trữ trên server
-//   //   const data = await fetch(`/api/login/${sessionID}`)
-//   //   res = await data.json();
-//   //   console.log(res);
-//   //   return res
-//   // } else {
-//   //   // ...
-//   //   return null
-//   // }
-//   console.log(req.headers);
-//   return 123;
-// }
