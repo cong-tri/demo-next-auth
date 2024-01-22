@@ -3,16 +3,17 @@ import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { MY_SECRET_TOKEN, MY_SESSION_TOKEN_KEY } from "@/constant";
 import { getSession } from "../lib/session";
+import { redirect } from "next/navigation";
 // get cookies
-export const getCookie = (): string => {
-  return cookies().get(MY_SESSION_TOKEN_KEY)?.value as string;
+export const getCookie = (cname: string): number => {
+  return Number(cookies().get(cname)?.value);
 };
 // create cookies
 export const setCookie = (token: string): any | undefined => {
   return cookies().set(MY_SESSION_TOKEN_KEY, token, {
     expires: 5,
     path: "/",
-    maxAge: 60 * 10,
+    maxAge: 60 * 1000,
     httpOnly: true,
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
@@ -25,7 +26,7 @@ export const createToken = (
 ): any | undefined => {
   return jwt.sign({ sessionData, sessionID }, MY_SECRET_TOKEN, {
     algorithm: "HS256",
-    expiresIn: "10minutes",
+    expiresIn: "1d",
   });
 };
 // decode token
@@ -41,40 +42,44 @@ export const verifyToken = (token: any) => {
   }
 };
 // getServerSideProps
-export async function get_Server_Side_Props() {
-  const session: string = await getCookie();
-  const infoUser: jwt.JwtPayload = await decodeToken(session);
-  return {
-    session,
-    infoUser,
-  };
-}
+// export async function get_Server_Side_Props() {
+//   const session: number = await getCookie(MY_SESSION_TOKEN_KEY);
+//   const infoUser: jwt.JwtPayload = await decodeToken(session);
+//   return {
+//     session,
+//     infoUser,
+//   };
+// }
 
-export default async function handler(req: any, res: any): Promise<any>{
-  const session = await getSession(req, res);
-  const data = { hello: "hello im a data in session" };
-  session.myData = data;
-  // return Response.json({
-  //   status: 200,
-  //   res: session.myData
-  // })
-}
-export const config = {
-  api: {
-    externalResolver: true,
-  },
-};
-
-export async function getServerSide(): Promise<any>{
-  // const session = await getSession(req, res);
+// place to store session information
+export async function getServerSide(): Promise<any> {
   const request: any = Request;
   const response: any = Response;
   const session = await getSession(request, response);
-  console.log(session);
-  
   return {
-    props: {
-      dataInSession: session.myData,
-    },
+    myData: session.myData,
   };
+}
+
+// handle check authentication
+export async function checkAuthen(): Promise<any>{
+  const { myData } = await getServerSide();
+  const { sessionID, user } = myData;
+  const cookieClient = getCookie("Session%20ID");
+  if (sessionID === cookieClient) {
+    return {
+      status: 200,
+      message: "Successfully logged in",
+      data: user,
+      httpPath: "/",
+    }
+  } else {
+    delete myData.user;
+    return {
+      status: 400,
+      message: "Please Sign In before Entered The Home Page",
+      data: null,
+      httpPath: "/signin",
+    }
+  }
 }

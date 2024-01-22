@@ -1,5 +1,6 @@
 import { setCookie, createToken } from "@/app/services";
 import { ListUser } from "@/constant";
+import { getSession } from "../lib/session";
 // method POST
 export async function POST(request: Request): Promise<any | undefined> {
   const { username, password } = await request.json();
@@ -9,23 +10,24 @@ export async function POST(request: Request): Promise<any | undefined> {
       status: 400,
     });
   }
+  var res: any = {};
   // create random sessionID when client send request to server
   // server session id
   const authenUser = await authenticateUser(username, password);
   const { user, sessionID } = authenUser;
   if (authenUser) {
     const tokenUser = createToken(user, sessionID);
-    setCookie(tokenUser);
-    return Response.json({
+    // setCookie(tokenUser);
+    res = Response.json({
       name: "Session Response",
       status: 200,
-      data: { sessionID, user, tokenUser },
+      data: { sessionID },
       message: "Login Successfully",
       httpPath: "/",
       statusLogin: true,
     });
   } else {
-    return Response.json({
+    res = Response.json({
       name: "Session Response",
       status: 400,
       data: null,
@@ -34,8 +36,16 @@ export async function POST(request: Request): Promise<any | undefined> {
       statusLogin: false,
     });
   }
+  const req: any = Request;
+  const response: any = Response;
+  const session = await getSession(req, response);
+  if (session.myData) delete session.myData
+  session.myData = {
+    sessionID, user
+  }
+  console.log(session);
+  return res;
 }
-
 async function authenticateUser(
   username: string,
   password: string

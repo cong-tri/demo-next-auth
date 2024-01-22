@@ -14,10 +14,12 @@
     "connect-sqlite3": "^0.9.13",
     "cookie": "^0.6.0",
     "jsonwebtoken": "^9.0.2",
+    "nanoid": "^5.0.4",
     "next": "14.0.4",
     "next-session": "^4.0.5",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "typescript-cookie": "^1.0.6"
   },
   "devDependencies": {
     "@types/cookie": "^0.6.0",

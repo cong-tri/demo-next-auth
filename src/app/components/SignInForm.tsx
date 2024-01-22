@@ -2,6 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, Form, Input, message } from 'antd';
+import { setCookie } from 'typescript-cookie';
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
 };
@@ -21,8 +22,10 @@ const SignInForm: React.FC = () => {
                 }
             );
             const response = await responseSession.json();
+            console.log(response);
             if (responseSession.ok && responseSession.status === 200) {
                 message.success(response.message);
+                setCookie("Session ID", response.data.sessionID);
                 setTimeout(() => {
                     router.push(response.httpPath);
                 }, 1000);
