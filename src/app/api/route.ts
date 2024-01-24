@@ -1,4 +1,4 @@
-import { setCookie, createToken } from "@/app/services";
+// import { setCookie, createToken } from "@/app/services";
 import { ListUser } from "@/constant";
 import { getSession } from "../lib/session";
 // method POST
@@ -16,7 +16,7 @@ export async function POST(request: Request): Promise<any | undefined> {
   const authenUser = await authenticateUser(username, password);
   const { user, sessionID } = authenUser;
   if (authenUser) {
-    const tokenUser = createToken(user, sessionID);
+    // const tokenUser = createToken(user, sessionID);
     // setCookie(tokenUser);
     res = Response.json({
       name: "Session Response",

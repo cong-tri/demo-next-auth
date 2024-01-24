@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { MY_SECRET_TOKEN, MY_SESSION_TOKEN_KEY } from "@/constant";
 import { getSession } from "../lib/session";
-import { redirect } from "next/navigation";
 // get cookies
 export const getCookie = (cname: string): number => {
   return Number(cookies().get(cname)?.value);
@@ -41,15 +40,6 @@ export const verifyToken = (token: any) => {
     return null;
   }
 };
-// getServerSideProps
-// export async function get_Server_Side_Props() {
-//   const session: number = await getCookie(MY_SESSION_TOKEN_KEY);
-//   const infoUser: jwt.JwtPayload = await decodeToken(session);
-//   return {
-//     session,
-//     infoUser,
-//   };
-// }
 
 // place to store session information
 export async function getServerSide(): Promise<any> {
@@ -61,15 +51,16 @@ export async function getServerSide(): Promise<any> {
   };
 }
 
-// handle check authentication
-export async function checkAuthen(): Promise<any>{
+// getServerSideProps
+export async function get_Server_Side_Props(): Promise<any>{
   const { myData } = await getServerSide();
+  console.log(myData);
   const { sessionID, user } = myData;
   const cookieClient = getCookie("Session%20ID");
   if (sessionID === cookieClient) {
     return {
       status: 200,
-      message: "Successfully logged in",
+      message: "Successfully Logged in",
       data: user,
       httpPath: "/",
     }
@@ -77,7 +68,7 @@ export async function checkAuthen(): Promise<any>{
     delete myData.user;
     return {
       status: 400,
-      message: "Please Sign In before Entered The Home Page",
+      message: "Please Login before Entered The Home Page",
       data: null,
       httpPath: "/signin",
     }
