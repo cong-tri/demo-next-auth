@@ -4,8 +4,8 @@ import { cookies } from "next/headers";
 import { MY_SECRET_TOKEN, MY_SESSION_TOKEN_KEY } from "@/constant";
 import { getSession } from "../lib/session";
 // get cookies
-export const getCookie = (cname: string): number => {
-  return Number(cookies().get(cname)?.value);
+export const getCookie = (cname: string): any => {
+  return Number(cookies().get(cname)?.value) as number;
 };
 // create cookies
 export const setCookie = (token: string): any | undefined => {
@@ -52,18 +52,18 @@ export async function getServerSide(): Promise<any> {
 }
 
 // getServerSideProps
-export async function get_Server_Side_Props(): Promise<any>{
+export async function get_Server_Side_Props(): Promise<any> {
   const { myData } = await getServerSide();
-  if (myData === undefined) return
+  if (myData === undefined) return;
   const { sessionID, user } = myData;
-  const cookieClient = getCookie("Session%20ID");
+  const cookieClient = getCookie("My Session ID");
   if (sessionID === cookieClient) {
     return {
       status: 200,
       message: "Successfully Logged in",
       data: user,
       httpPath: "/",
-    }
+    };
   } else {
     delete myData.user;
     return {
@@ -71,6 +71,7 @@ export async function get_Server_Side_Props(): Promise<any>{
       message: "Please Login before Entered The Home Page",
       data: null,
       httpPath: "/signin",
-    }
+    };
   }
 }
+

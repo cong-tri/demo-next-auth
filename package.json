@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.0",
-    "antd": "^5.12.7",
     "connect-sqlite3": "^0.9.13",
     "cookie": "^0.6.0",
+    "antd": "^5.13.2",
     "jsonwebtoken": "^9.0.2",
     "nanoid": "^5.0.4",
     "next": "14.0.4",

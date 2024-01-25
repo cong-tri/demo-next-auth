@@ -12,31 +12,31 @@ type FieldType = {
     remember?: string;
 };
 const SignInForm: React.FC = () => {
-    const router = useRouter();
+    const router = useRouter()
     const onFinish = async (values: any) => {
         try {
-            const responseSession = await fetch('/api',
+            const responseSession = await fetch('/api/login',
                 {
                     method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(values),
                 }
-            );
-            const response = await responseSession.json();
-            console.log(response);
+            )
+            const response = await responseSession.json()
             if (responseSession.ok && responseSession.status === 200) {
-                message.success(response.message);
-                setCookie("Session ID", response.data.sessionID);
+                message.success(responseSession.statusText)
+                // setCookie("Session ID", response.data.sessionID, { expires: 7 })
                 setTimeout(() => {
                     router.push(response.httpPath);
                 }, 1000);
             } else {
-                console.error(response.message);
-                return;
+                console.error(responseSession.statusText);
+                return
             }
         } catch (error) {
-            message.error('Login failed');
+            console.error('Login failed');
         }
-    };
+    }
     return (
         <Form
             name="basic"
