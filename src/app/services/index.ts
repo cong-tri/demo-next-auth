@@ -46,6 +46,7 @@ export async function getServerSide(): Promise<any> {
   const request: any = Request;
   const response: any = Response;
   const session = await getSession(request, response);
+  console.log(session);
   return {
     myData: session.myData,
   };
@@ -54,6 +55,8 @@ export async function getServerSide(): Promise<any> {
 // getServerSideProps
 export async function get_Server_Side_Props(): Promise<any> {
   const { myData } = await getServerSide();
+  console.log(myData);
+  
   if (myData === undefined) return;
   const { sessionID, user } = myData;
   const cookieClient = getCookie("My Session ID");

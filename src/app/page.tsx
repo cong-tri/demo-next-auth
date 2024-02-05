@@ -4,10 +4,24 @@ import { redirect } from "next/navigation";
 import Title from "antd/es/typography/Title";
 import { getCookie } from "./services";
 export default async function Home(): Promise<any> {
-  async function checkAuthen() {
+  async function checkAuthen(): Promise<any | undefined> {
     'use server'
+    let dataResponse = {
+      status: 400,
+      data: {},
+      message: "",
+      path: ''
+    };
     try {
-      const cookieClient = getCookie('My Session ID')
+      const cookieClient = getCookie('sessionId');
+      if (isNaN(cookieClient)) {
+        dataResponse = {
+          status: 401,
+          data: {},
+          message: "Cookie is not valid",
+          path: '/signin'
+        };;
+      }
       const response = await fetch(`http://localhost:3000/api/checkAuthen`, {
         method: 'POST',
         headers: {
@@ -16,32 +30,31 @@ export default async function Home(): Promise<any> {
         body: JSON.stringify(cookieClient),
       })
       const data = await response?.json()
-      if (data.status !== 200 && response.statusText != "OK") return false
-      return true;
+      if (data.status === 200) {
+        dataResponse = {
+          status: 200,
+          data: data.data,
+          message: "Successfully",
+          path: '/'
+        }
+      } else {
+        dataResponse = {
+          status: 400,
+          data: {},
+          message: "Unsuccessfully",
+          path: '/signin'
+        };
+      }
+      return Response.json(dataResponse);
     } catch (error) {
       console.error(error);
     }
   }
-  const isValid = await checkAuthen();
-  if (isValid == false) {
-    redirect('/signin')
+  let authen = await checkAuthen();
+  authen = await authen?.json()
+  if (authen?.status === 400) {
+    redirect(authen.path);
   }
-  async function getAuth() {
-    // 'use server'
-    try {
-      const response = await fetch(`http://localhost:3000/api/login`, {
-        method: 'GET',
-      })
-      const data = await response;
-      console.log(data);
-
-    } catch (err) {
-      console.log(err);
-
-    }
-  }
-  const bool = await getAuth()
-  // console.log(bool);
   return (
     <>
       <Title level={2}>Next Js Authentication</Title>
