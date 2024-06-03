@@ -9,29 +9,29 @@ export function middleware(request: NextRequest) {
 
   const authorByCookie = request.cookies.get("Authenticate")?.value;
 
-  // if (currentPath === "/dashboard" && !authorByCookie) {
-  //   console.log("signin");
-  //   return NextResponse.redirect(new URL("/signin", request.url));
-  // }
+  if (currentPath === "/dashboard" && !authorByCookie) {
+    console.log("signin");
+    return NextResponse.redirect(new URL("/signin", request.url));
+  }
 
-  const requestHeaders = new Headers(request.headers);
+  // const requestHeaders = new Headers(request.headers);
 
-  if (requestHeaders.has("Authorization") == false)
-    requestHeaders.set("Authorization", authorByCookie ? `Bearer ${authorByCookie}` : "");
+  // if (requestHeaders.has("Authorization") == false)
+  //   requestHeaders.set("Authorization", authorByCookie ? `Bearer ${authorByCookie}` : "");
 
-  const authenByHeader = requestHeaders.get("Authorization");
+  // const authenByHeader = requestHeaders.get("Authorization");
 
-  if (currentPath === "/dashboard") 
-    if (!authenByHeader && authenByHeader !== `Bearer ${authorByCookie}`) 
-      return NextResponse.redirect(new URL("/signin", request.url));
+  // if (currentPath === "/dashboard") 
+  //   if (!authenByHeader && authenByHeader !== `Bearer ${authorByCookie}`) 
+  //     return NextResponse.redirect(new URL("/signin", request.url));
 
-  const response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  // const response = NextResponse.next({
+  //   request: {
+  //     headers: requestHeaders,
+  //   },
+  // });
 
-  return response;
+  return NextResponse.next();
 }
 export const config = {
   matcher: ["/", "/dashboard"],
