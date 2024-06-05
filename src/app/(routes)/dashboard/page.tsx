@@ -1,7 +1,7 @@
 /** @format */
 
 import React from "react";
-import { logout } from "@/app/actions";
+import { logout } from "@/app/lib/actions";
 
 const DashBoardPage = async () => {
   return (

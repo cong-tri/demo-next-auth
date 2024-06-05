@@ -2,7 +2,7 @@
 
 import Title from "antd/es/typography/Title";
 import SignInForm from "./SignInForm";
-import { authenticate } from "@/app/actions";
+import { authenticate } from "@/app/lib/actions";
 
 export default function SignIn() {
   return (

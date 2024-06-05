@@ -1,38 +1,28 @@
 /** @format */
 
 import { type NextRequest, NextResponse } from "next/server";
+import { storeSession } from "./app/lib/actions";
 
-export function middleware(request: NextRequest) {
-  const currentPath = request.nextUrl.pathname;
-  if (currentPath === "/")
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+export async function middleware(request: NextRequest) {
+  const session: any = await storeSession();
 
-  const authorByCookie = request.cookies.get("Authenticate")?.value;
+  const { token } = session ? session : null;
+  const tokenClient = request.cookies.get("Authenticate")?.value;
 
-  if (currentPath === "/dashboard" && !authorByCookie) {
-    console.log("signin");
+  const valid = checkValidToken(token as string, tokenClient as string);
+
+  if (config.matcher.includes(request.nextUrl.pathname) && valid == false)
     return NextResponse.redirect(new URL("/signin", request.url));
-  }
-
-  // const requestHeaders = new Headers(request.headers);
-
-  // if (requestHeaders.has("Authorization") == false)
-  //   requestHeaders.set("Authorization", authorByCookie ? `Bearer ${authorByCookie}` : "");
-
-  // const authenByHeader = requestHeaders.get("Authorization");
-
-  // if (currentPath === "/dashboard") 
-  //   if (!authenByHeader && authenByHeader !== `Bearer ${authorByCookie}`) 
-  //     return NextResponse.redirect(new URL("/signin", request.url));
-
-  // const response = NextResponse.next({
-  //   request: {
-  //     headers: requestHeaders,
-  //   },
-  // });
 
   return NextResponse.next();
 }
+
 export const config = {
   matcher: ["/", "/dashboard"],
+};
+
+const checkValidToken = (tokenA: string, tokenB: string) => {
+  if (tokenA === undefined && tokenB === undefined) return false;
+  else if (tokenA !== tokenB) return false;
+  else return true;
 };

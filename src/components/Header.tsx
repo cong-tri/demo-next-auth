@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   };
   const items: MenuProps["items"] = [
     {
-      label: <Link href={"/dashboard"}>Home Page</Link>,
+      label: <Link href={"/dashboard"}>Dashboard Page</Link>,
       key: "dashboard",
     },
     {

@@ -6,6 +6,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Form, Input, message } from "antd";
 import SubmitBtn from "./SubmitBtn";
+import { setCookie } from "typescript-cookie";
 
 type FieldType = {
   username?: string;
@@ -19,18 +20,18 @@ export default function SignInForm({ handleFunction }: any) {
 
   const onFinish = async (values: any) => {
     const { username, password } = values;
+    const response = await handleFunction(username, password);
 
-    const result = await handleFunction(username, password);
-    console.log(result);
+    if (response.status == 200) {
+      message.success(response.message);
 
-    if (result.status == 200) {
-      message.success(result.message);
+      setCookie("Authenticate", response.token);
 
       setTimeout(() => {
-        router.push(result.path);
+        router.push(response.path);
       }, 2000);
     } else {
-      message.error(result.message);
+      message.error(response.message);
       return;
     }
   };

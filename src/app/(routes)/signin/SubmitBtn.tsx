@@ -6,9 +6,11 @@ import { Button } from "antd";
 const SubmitBtn = () => {
   const { pending } = useFormStatus();
   return (
-    <Button type='primary' htmlType='submit' aria-disabled={pending}>
-      {pending ? "Submiting" : "Submit"}
-    </Button>
+    <>
+      <Button type='primary' htmlType='submit' aria-disabled={pending}>
+        {pending ? "Submiting" : "Submit"}
+      </Button>
+    </>
   );
 };
 
