@@ -16,7 +16,6 @@ export async function authenticate(username: string, password: string) {
     };
   } else {
     const sessionID = Math.round(Math.random() * (20 - 10) + 10);
-
     const token = "Authorize Successfully";
 
     await kv.set("Session", {sessionID, token});

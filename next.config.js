@@ -4,14 +4,23 @@
  */
 
 const path = require("path");
-const nextConfig = {
+
+module.exports = {
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
   reactStrictMode: true,
-  // experimental: {
-  //   outputFileTracingRoot: path.join(__dirname, "../../"),
-  // },
+  async headers() {
+    return [
+      {
+        source: "/dashboard",
+        headers: [
+          {
+            key: "Authorization",
+            value: "test",
+          },
+        ],
+      },
+    ];
+  },
 };
-
-module.exports = nextConfig;
