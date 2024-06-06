@@ -7,10 +7,10 @@ export async function middleware(request: NextRequest) {
   const session: any = await storeSession();
 
   const { token } = session ? session : null;
-  // const tokenClient = request.cookies.get("Authenticate")?.value;
-  const tokenClient = convertCookie(request.headers.get("cookie") as string);
+  const tokenClient = request.cookies.get("Authenticate")?.value as string;
+  // const tokenClient = convertCookie(request.headers.get("cookie") as string);
   
-  const valid = checkValidToken(token as string, tokenClient as string);
+  const valid = checkValidToken(token as string, tokenClient);
 
   if (config.matcher.includes(request.nextUrl.pathname) && valid == false) {
     return NextResponse.redirect(new URL("/signin", request.url));
